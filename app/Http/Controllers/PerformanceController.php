@@ -12,7 +12,11 @@ class PerformanceController extends Controller
      */
     public function index()
     {
-        //
+        // Retrieve all performances, optionally paginating them.
+        $performances = Performance::paginate(10); // Adjust the number for the desired items per page
+
+        // Pass the performances to the 'index' view
+        return view('performances.index', compact('performances'));
     }
 
     /**
@@ -20,7 +24,7 @@ class PerformanceController extends Controller
      */
     public function create()
     {
-        //
+        return view('performances.create');
     }
 
     /**
@@ -28,7 +32,27 @@ class PerformanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'event_id' => 'required|integer',
+            'musician_id' => 'required|integer',
+            'composer' => 'required|string|max:255',
+            'piece' => 'required|string|max:255',
+            'duration' => 'required|date_format:H:i:s',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Handle image upload if an image is provided
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $validated['image'] = $imagePath;
+        }
+
+        // Create a new performance record
+        Performance::create($validated);
+
+        // Redirect to the performances list with a success message
+        return redirect()->route('performances.index')->with('success', 'Performance created successfully.');
     }
 
     /**
@@ -36,7 +60,7 @@ class PerformanceController extends Controller
      */
     public function show(Performance $performance)
     {
-        //
+        return view('performances.show', compact('performance'));
     }
 
     /**
@@ -44,7 +68,7 @@ class PerformanceController extends Controller
      */
     public function edit(Performance $performance)
     {
-        //
+        return view('performances.edit', compact('performance'));
     }
 
     /**
@@ -52,7 +76,27 @@ class PerformanceController extends Controller
      */
     public function update(Request $request, Performance $performance)
     {
-        //
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'event_id' => 'required|integer',
+            'musician_id' => 'required|integer',
+            'composer' => 'required|string|max:255',
+            'piece' => 'required|string|max:255',
+            'duration' => 'required|date_format:H:i:s',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Handle image upload if a new image is provided
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $validated['image'] = $imagePath;
+        }
+
+        // Update the performance record with validated data
+        $performance->update($validated);
+
+        // Redirect to the performances list with a success message
+        return redirect()->route('performances.index')->with('success', 'Performance updated successfully.');
     }
 
     /**
@@ -60,6 +104,7 @@ class PerformanceController extends Controller
      */
     public function destroy(Performance $performance)
     {
-        //
+        $performance->delete();
+        return redirect()->route('performances.index')->with('success', 'Performance deleted successfully.');
     }
 }
