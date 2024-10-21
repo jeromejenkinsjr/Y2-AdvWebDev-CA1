@@ -1,59 +1,24 @@
-<!-- resources/views/performances/index.blade.php -->
-
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1 class="mb-4">Performances</h1>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Performances</h1>
 
     @if($performances->isEmpty())
-        <p>No performances available.</p>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">No performances available.</strong>
+        </div>
     @else
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Event ID</th>
-                    <th>Musician ID</th>
-                    <th>Composer</th>
-                    <th>Piece</th>
-                    <th>Duration</th>
-                    <th>Image</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($performances as $performance)
-                    <tr>
-                        <td>{{ $performance->performance_id }}</td>
-                        <td>{{ $performance->event_id }}</td>
-                        <td>{{ $performance->musician_id }}</td>
-                        <td>{{ $performance->composer }}</td>
-                        <td>{{ $performance->piece }}</td>
-                        <td>{{ $performance->duration }}</td>
-                        <td>
-                            @if($performance->image)
-                                <img src="{{ asset($performance->image) }}" alt="{{ $performance->piece }}" width="100">
-                            @else
-                                No Image
-                            @endif
-                        </td>
-                        <td>
-                            <a href="{{ route('performances.show', $performance->performance_id) }}" class="btn btn-primary btn-sm">View</a>
-                            <a href="{{ route('performances.edit', $performance->performance_id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('performances.destroy', $performance->performance_id) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this performance?')">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach($performances as $performance)
+                <x-performance-card :performance="$performance" />
+            @endforeach
+        </div>
 
-        <!-- Pagination links, if using pagination in the controller -->
-        {{ $performances->links() }}
+        <!-- Pagination links -->
+        <div class="mt-4">
+            {{ $performances->links() }}
+        </div>
     @endif
 </div>
 @endsection

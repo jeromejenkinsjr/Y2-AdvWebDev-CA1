@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PerformanceController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,4 +19,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+Route::middleware('auth')->group(function () {
+    Route::resource('performances', PerformanceController::class);
+});
 require __DIR__.'/auth.php';
