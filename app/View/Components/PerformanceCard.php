@@ -8,12 +8,18 @@ use Illuminate\View\Component;
 
 class PerformanceCard extends Component
 {
-    public function __construct($performance)
+    /**
+     * Create a new component instance.
+     */
+    public function __construct()
     {
-        $this->performance = $performance;
+        //
     }
 
-    public function render()
+    /**
+     * Get the view / contents that represent the component.
+     */
+    public function render(): View|Closure|string
     {
         return view('components.performance-card');
     }

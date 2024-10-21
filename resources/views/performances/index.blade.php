@@ -11,7 +11,7 @@
     @else
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach($performances as $performance)
-                <x-performance-card :performance="$performance" />
+            <x-performance-card :piece="$performance->piece" :composer="$performance->composer" :duration="$performance->duration" :image="$performance->image" />
             @endforeach
         </div>
 
