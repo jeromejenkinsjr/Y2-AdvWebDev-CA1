@@ -11,10 +11,12 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
-    {
-        // User::factory(10)->create();
-
-        $this->call(PerformanceSeeder::class);
-    }
+    public function run()
+{
+    $this->call([
+        EventSeeder::class,
+        MusicianSeeder::class,
+        PerformanceSeeder::class,
+    ]);
+}
 }
