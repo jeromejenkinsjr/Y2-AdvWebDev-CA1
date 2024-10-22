@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Performance;
 use Illuminate\Http\Request;
@@ -77,14 +78,24 @@ class PerformanceController extends Controller
             'duration' => 'required|date_format:H:i:s',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
-        if ($request->hasFile('image')) {
+    
+        // Check if the remove_image checkbox was checked
+        if ($request->has('remove_image')) {
+            // Remove the existing image from storage if it exists
+            if ($performance->image) {
+                Storage::disk('public')->delete($performance->image);
+            }
+            // Set the image attribute to null in the validated data
+            $validated['image'] = null;
+        } elseif ($request->hasFile('image')) {
+            // Store the new image and update the validated data
             $imagePath = $request->file('image')->store('images', 'public');
             $validated['image'] = $imagePath;
         }
-
+    
+        // Update the performance record
         $performance->update($validated);
-
+    
         return redirect()->route('performances.index')->with('success', 'Performance updated successfully.');
     }
 
@@ -96,4 +107,6 @@ class PerformanceController extends Controller
         $performance->delete();
         return redirect()->route('performances.index')->with('success', 'Performance deleted successfully.');
     }
+
+
 }
