@@ -1,17 +1,16 @@
 <?php
 
-namespace Database\Seeders;
-
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Event;
 
-class EventsSeeder extends Seeder
+class EventSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        //
+        Event::insert([
+            ['id' => 1, 'name' => 'Beethoven Concert', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2, 'name' => 'Mozart Concert', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3, 'name' => 'Bach Concert', 'created_at' => now(), 'updated_at' => now()],
+        ]);
     }
 }
