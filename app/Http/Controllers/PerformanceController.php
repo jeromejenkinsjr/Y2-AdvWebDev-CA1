@@ -13,7 +13,7 @@ class PerformanceController extends Controller
      */
     public function index()
     {
-        $performances = Performance::paginate(10);
+        $performances = Performance::all();
         return view('performances.index', compact('performances'));
     }
 

@@ -23,5 +23,7 @@ Route::get('/performances/{id}', [PerformanceController::class, 'show'])->name('
 
 Route::middleware('auth')->group(function () {
     Route::resource('performances', PerformanceController::class);
+    Route::get('performances', [PerformanceController::class, 'index'])->name('performances.index');
+
 });
 require __DIR__.'/auth.php';
